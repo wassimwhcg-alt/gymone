@@ -1,0 +1,614 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Gym One — Be Strong · Ariana</title>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Cairo:wght@400;600;700;900&family=Barlow+Condensed:ital,wght@0,700;0,900;1,700&display=swap" rel="stylesheet"/>
+  <style>
+    :root {
+      --red: #E8001C;
+      --red-dark: #A50014;
+      --black: #080808;
+      --black-mid: #0f0f0f;
+      --black-card: #151515;
+      --white: #F5F5F5;
+      --grey: #666;
+      --grey-light: #999;
+    }
+    * { margin:0; padding:0; box-sizing:border-box; }
+    html { scroll-behavior:smooth; }
+    body { background:var(--black); color:var(--white); font-family:'Cairo',sans-serif; overflow-x:hidden; }
+
+    /* ── LANG SYSTEM ── */
+    .fr-c { display:block; }
+    .ar-c { display:none; }
+    .fr-i { display:inline; }
+    .ar-i { display:none; }
+    body.ar .fr-c { display:none; }
+    body.ar .ar-c { display:block; }
+    body.ar .fr-i { display:none; }
+    body.ar .ar-i { display:inline; }
+
+    /* ── NAV ── */
+    nav {
+      position:fixed; top:0; left:0; right:0; z-index:1000;
+      display:flex; justify-content:space-between; align-items:center;
+      padding:1rem 1.5rem;
+      background:linear-gradient(to bottom, rgba(8,8,8,0.97), transparent);
+    }
+    .nav-logo {
+      display:flex; align-items:center; gap:0.6rem;
+      text-decoration:none;
+    }
+    .nav-logo-mark {
+      width:36px; height:36px; border-radius:50%;
+      background:var(--red);
+      display:flex; align-items:center; justify-content:center;
+      font-family:'Bebas Neue',sans-serif; font-size:1rem;
+      color:var(--white); letter-spacing:0.05em;
+    }
+    .nav-logo-text {
+      font-family:'Bebas Neue',sans-serif;
+      font-size:1.3rem; letter-spacing:0.2em; color:var(--white);
+      line-height:1;
+    }
+    .nav-logo-text span { color:var(--red); }
+    .nav-right { display:flex; align-items:center; gap:1rem; }
+    .nav-phone {
+      font-size:0.8rem; color:var(--grey-light);
+      letter-spacing:0.05em; text-decoration:none;
+      transition:color 0.3s;
+    }
+    .nav-phone:hover { color:var(--red); }
+    .lang-btns { display:flex; gap:0.3rem; }
+    .lang-btn {
+      background:transparent; border:1px solid rgba(232,0,28,0.4);
+      color:var(--red); padding:0.25rem 0.6rem;
+      font-size:0.7rem; cursor:pointer;
+      font-family:'Cairo',sans-serif; transition:all 0.3s;
+    }
+    .lang-btn.active, .lang-btn:hover { background:var(--red); color:var(--white); }
+
+    /* ── HERO ── */
+    .hero {
+      height:100vh; position:relative; overflow:hidden;
+      display:flex; align-items:center;
+    }
+    .hero-bg {
+      position:absolute; inset:0;
+      background:
+        linear-gradient(105deg, rgba(232,0,28,0.12) 0%, transparent 50%),
+        var(--black);
+    }
+    /* Diagonal red accent */
+    .hero-accent {
+      position:absolute; top:0; right:0;
+      width:45%; height:100%;
+      background:linear-gradient(to bottom left, rgba(232,0,28,0.08), transparent);
+      clip-path:polygon(20% 0, 100% 0, 100% 100%, 0% 100%);
+    }
+    /* Grid lines */
+    .hero-grid {
+      position:absolute; inset:0;
+      background-image:
+        linear-gradient(rgba(232,0,28,0.04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(232,0,28,0.04) 1px, transparent 1px);
+      background-size:50px 50px;
+    }
+    /* Photo placeholder right side */
+    .hero-photo {
+      position:absolute; right:0; top:0; bottom:0;
+      width:55%;
+      background:linear-gradient(135deg, #1a0a0a 0%, #0f0f0f 100%);
+      clip-path:polygon(15% 0, 100% 0, 100% 100%, 0% 100%);
+      display:flex; align-items:center; justify-content:center;
+      overflow:hidden;
+    }
+    .hero-photo-inner {
+      width:100%; height:100%;
+      background:
+        linear-gradient(to left, transparent, var(--black) 40%),
+        url('HERO_IMAGE_URL') center/cover no-repeat;
+      /* Replace HERO_IMAGE_URL with actual image */
+      display:flex; align-items:center; justify-content:center;
+    }
+    .hero-photo-placeholder {
+      text-align:center; opacity:0.15;
+    }
+    .hero-photo-placeholder .big { font-family:'Bebas Neue',sans-serif; font-size:5rem; color:var(--red); line-height:1; }
+    .hero-photo-placeholder .small { font-size:0.7rem; letter-spacing:0.3em; color:var(--white); }
+    .hero-overlay-left {
+      position:absolute; inset:0;
+      background:linear-gradient(to right, var(--black) 35%, transparent 65%);
+    }
+    .hero-content {
+      position:relative; z-index:2;
+      padding:0 2rem 0 2rem;
+      max-width:600px;
+    }
+    .hero-tag {
+      display:inline-flex; align-items:center; gap:0.5rem;
+      font-size:0.65rem; letter-spacing:0.3em; text-transform:uppercase;
+      color:var(--red); margin-bottom:1.2rem;
+      animation:fadeUp 0.7s ease both;
+    }
+    .hero-tag::before {
+      content:''; display:block;
+      width:30px; height:2px; background:var(--red);
+    }
+    .hero-title {
+      font-family:'Barlow Condensed',sans-serif;
+      font-size:clamp(4rem,12vw,7.5rem);
+      font-weight:900; line-height:0.9;
+      text-transform:uppercase;
+      animation:fadeUp 0.7s 0.1s ease both;
+    }
+    .hero-title .red { color:var(--red); }
+    .hero-title.ar-t {
+      font-family:'Cairo',sans-serif;
+      font-size:clamp(3rem,9vw,6rem);
+      font-weight:900; direction:rtl;
+    }
+    .hero-tagline {
+      font-size:1.1rem; color:var(--grey-light);
+      margin:1.2rem 0 2rem; letter-spacing:0.05em;
+      font-style:italic;
+      animation:fadeUp 0.7s 0.2s ease both;
+    }
+    .hero-tagline.ar-t { font-style:normal; direction:rtl; font-size:1rem; }
+    .hero-actions {
+      display:flex; gap:0.8rem; flex-wrap:wrap;
+      animation:fadeUp 0.7s 0.3s ease both;
+    }
+    .btn-red {
+      display:inline-block; padding:0.9rem 2.2rem;
+      background:var(--red); color:var(--white);
+      text-decoration:none;
+      font-family:'Bebas Neue',sans-serif;
+      font-size:1rem; letter-spacing:0.2em;
+      transition:all 0.3s; border:2px solid var(--red);
+    }
+    .btn-red:hover { background:var(--red-dark); box-shadow:0 6px 20px rgba(232,0,28,0.4); transform:translateY(-2px); }
+    .btn-outline {
+      display:inline-block; padding:0.9rem 2.2rem;
+      background:transparent; color:var(--white);
+      text-decoration:none;
+      font-family:'Bebas Neue',sans-serif;
+      font-size:1rem; letter-spacing:0.2em;
+      border:2px solid rgba(255,255,255,0.2);
+      transition:all 0.3s;
+    }
+    .btn-outline:hover { border-color:var(--red); color:var(--red); }
+    .btn-ar { font-family:'Cairo',sans-serif; letter-spacing:0; font-weight:700; font-size:0.95rem; }
+
+    /* ── STATS BAR ── */
+    .stats-bar {
+      background:var(--red);
+      padding:1.5rem 2rem;
+      display:grid; grid-template-columns:repeat(4,1fr);
+      text-align:center; gap:1px;
+    }
+    .stat-item { padding:0.5rem; }
+    .stat-num {
+      font-family:'Bebas Neue',sans-serif;
+      font-size:2rem; letter-spacing:0.1em; line-height:1;
+    }
+    .stat-label { font-size:0.7rem; letter-spacing:0.15em; opacity:0.85; text-transform:uppercase; }
+    .stat-label.ar-t { font-family:'Cairo',sans-serif; letter-spacing:0; font-size:0.75rem; }
+
+    /* ── SECTION BASE ── */
+    .section { padding:5rem 1.5rem; }
+    .section-inner { max-width:1100px; margin:0 auto; }
+    .section-header { margin-bottom:3rem; }
+    .eyebrow {
+      display:block; font-size:0.65rem; letter-spacing:0.4em;
+      color:var(--red); text-transform:uppercase; margin-bottom:0.8rem;
+    }
+    .section-title {
+      font-family:'Barlow Condensed',sans-serif;
+      font-size:clamp(2.5rem,6vw,4rem);
+      font-weight:900; text-transform:uppercase; line-height:1;
+    }
+    .section-title .red { color:var(--red); }
+    .section-title.ar-t {
+      font-family:'Cairo',sans-serif;
+      font-size:clamp(2rem,5vw,3rem); font-weight:900; direction:rtl;
+    }
+    .red-line {
+      width:50px; height:3px; background:var(--red); margin-top:1rem;
+    }
+    body.ar .red-line { margin-left:auto; margin-right:0; }
+
+    /* ── GYM SECTION ── */
+    .gym-section { background:var(--black-mid); }
+    .gym-grid {
+      display:grid; grid-template-columns:1fr 1fr;
+      gap:3rem; align-items:center;
+    }
+    .gym-photos {
+      display:grid; grid-template-columns:1fr 1fr;
+      gap:4px;
+    }
+    .gym-photo {
+      aspect-ratio:1;
+      background:var(--black-card);
+      position:relative; overflow:hidden;
+      display:flex; align-items:center; justify-content:center;
+    }
+    .gym-photo:first-child {
+      grid-column:span 2; aspect-ratio:2/1;
+    }
+    .gym-photo-label {
+      position:absolute; bottom:0.8rem; left:0.8rem;
+      font-size:0.6rem; letter-spacing:0.2em;
+      color:rgba(255,255,255,0.6); text-transform:uppercase;
+    }
+    .gym-photo-icon { font-size:2rem; opacity:0.2; }
+    /* Slot for real images */
+    .gym-photo.p1 { background:linear-gradient(135deg,#1a0505,#0f0f0f); }
+    .gym-photo.p2 { background:linear-gradient(135deg,#0f0f0f,#1a0505); }
+    .gym-photo.p3 { background:linear-gradient(135deg,#150505,#0f0f0f); }
+    .gym-text p {
+      color:var(--grey-light); line-height:1.9; font-size:0.95rem;
+      margin-bottom:1rem;
+    }
+    .gym-text p.ar-t { direction:rtl; font-size:0.9rem; }
+    .feature-list { margin-top:1.5rem; display:flex; flex-direction:column; gap:0.6rem; }
+    .feature-row {
+      display:flex; align-items:center; gap:0.8rem;
+      font-size:0.85rem; color:var(--white);
+    }
+    .feature-row.ar-t { direction:rtl; justify-content:flex-end; }
+    .feature-check {
+      width:20px; height:20px; background:var(--red);
+      display:flex; align-items:center; justify-content:center;
+      font-size:0.7rem; flex-shrink:0;
+    }
+
+    /* ── SERVICES ── */
+    .services-grid {
+      display:grid; grid-template-columns:repeat(3,1fr);
+      gap:1.5px; background:rgba(232,0,28,0.1);
+    }
+    .svc-card {
+      background:var(--black-card); padding:2.5rem 1.8rem;
+      position:relative; overflow:hidden;
+      transition:all 0.35s;
+    }
+    .svc-card::before {
+      content:''; position:absolute;
+      top:0; left:0; right:0; height:3px;
+      background:var(--red); transform:scaleX(0);
+      transform-origin:left; transition:transform 0.4s;
+    }
+    .svc-card:hover::before { transform:scaleX(1); }
+    .svc-card:hover { background:#1c1c1c; }
+    .svc-icon { font-size:2rem; margin-bottom:1rem; }
+    .svc-name {
+      font-family:'Barlow Condensed',sans-serif;
+      font-size:1.5rem; font-weight:700; text-transform:uppercase;
+      color:var(--white); margin-bottom:0.6rem; letter-spacing:0.05em;
+    }
+    .svc-name.ar-t { font-family:'Cairo',sans-serif; font-size:1.2rem; direction:rtl; }
+    .svc-desc { font-size:0.85rem; color:var(--grey); line-height:1.75; }
+    .svc-desc.ar-t { direction:rtl; font-size:0.82rem; }
+
+    /* ── HOURS ── */
+    .hours-section { background:var(--red); }
+    .hours-grid {
+      display:grid; grid-template-columns:1fr 1fr 1fr;
+      gap:1px; background:rgba(0,0,0,0.2);
+      max-width:700px; margin:2rem auto 0;
+    }
+    .hour-card {
+      background:var(--red-dark); padding:2rem 1.5rem; text-align:center;
+    }
+    .hour-day {
+      font-family:'Bebas Neue',sans-serif;
+      font-size:1.1rem; letter-spacing:0.15em;
+      margin-bottom:0.5rem; opacity:0.85;
+    }
+    .hour-day.ar-t { font-family:'Cairo',sans-serif; font-size:0.95rem; letter-spacing:0; }
+    .hour-time {
+      font-family:'Barlow Condensed',sans-serif;
+      font-size:2rem; font-weight:900; line-height:1;
+    }
+    .hour-time.ar-t { font-family:'Cairo',sans-serif; font-size:1.6rem; }
+
+    /* ── MEMBERSHIP CTA ── */
+    .membership {
+      padding:5rem 2rem;
+      text-align:center; max-width:700px; margin:0 auto;
+    }
+    .membership h2 {
+      font-family:'Barlow Condensed',sans-serif;
+      font-size:clamp(2.5rem,6vw,4rem);
+      font-weight:900; text-transform:uppercase; margin-bottom:1rem;
+    }
+    .membership h2 .red { color:var(--red); }
+    .membership h2.ar-t { font-family:'Cairo',sans-serif; font-size:clamp(2rem,5vw,3rem); direction:rtl; }
+    .membership p { color:var(--grey-light); font-size:0.95rem; line-height:1.8; margin-bottom:2.5rem; }
+    .membership p.ar-t { direction:rtl; font-size:0.9rem; }
+    .contact-box {
+      border:1px solid rgba(232,0,28,0.25);
+      background:var(--black-card);
+      padding:2.5rem; display:flex; flex-direction:column;
+      align-items:center; gap:1.5rem;
+    }
+    .contact-phone {
+      font-family:'Barlow Condensed',sans-serif;
+      font-size:2.5rem; font-weight:700; letter-spacing:0.1em;
+      color:var(--red); text-decoration:none;
+      transition:opacity 0.3s;
+    }
+    .contact-phone:hover { opacity:0.8; }
+    .contact-address { font-size:0.85rem; color:var(--grey-light); letter-spacing:0.05em; }
+    .contact-address.ar-t { direction:rtl; }
+    .contact-divider {
+      width:40px; height:2px; background:rgba(232,0,28,0.3);
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      padding:2.5rem 2rem;
+      border-top:1px solid rgba(232,0,28,0.15);
+      display:flex; flex-direction:column; align-items:center; gap:0.8rem;
+      text-align:center;
+    }
+    .footer-brand {
+      font-family:'Barlow Condensed',sans-serif;
+      font-size:1.8rem; font-weight:900; text-transform:uppercase;
+      letter-spacing:0.2em;
+    }
+    .footer-brand .red { color:var(--red); }
+    .footer-tagline {
+      font-size:0.7rem; letter-spacing:0.35em;
+      color:var(--grey); text-transform:uppercase;
+    }
+    .footer-copy { font-size:0.65rem; color:rgba(102,102,102,0.5); letter-spacing:0.1em; }
+
+    /* ── ANIMATIONS ── */
+    @keyframes fadeUp {
+      from { opacity:0; transform:translateY(25px); }
+      to { opacity:1; transform:translateY(0); }
+    }
+    .reveal { opacity:0; transform:translateY(20px); transition:opacity 0.7s ease, transform 0.7s ease; }
+    .reveal.visible { opacity:1; transform:translateY(0); }
+
+    /* ── MOBILE ── */
+    @media(max-width:700px) {
+      .hero-photo { display:none; }
+      .stats-bar { grid-template-columns:repeat(2,1fr); }
+      .gym-grid { grid-template-columns:1fr; }
+      .services-grid { grid-template-columns:1fr; }
+      .hours-grid { grid-template-columns:1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a class="nav-logo" href="#">
+    <div class="nav-logo-mark">G1</div>
+    <div class="nav-logo-text">GYM <span>ONE</span></div>
+  </a>
+  <div class="nav-right">
+    <a href="tel:52344446" class="nav-phone">📞 52 344 446</a>
+    <div class="lang-btns">
+      <button class="lang-btn active" id="btn-fr" onclick="setLang('fr')">FR</button>
+      <button class="lang-btn" id="btn-ar" onclick="setLang('ar')">عر</button>
+    </div>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-accent"></div>
+  <div class="hero-grid"></div>
+  <div class="hero-photo">
+    <div class="hero-photo-inner">
+      <div class="hero-photo-placeholder">
+        <div class="big">G1</div>
+        <div class="small">Gym Interior Photo</div>
+      </div>
+    </div>
+  </div>
+  <div class="hero-overlay-left"></div>
+  <div class="hero-content">
+    <div class="hero-tag fr-c">Ariana · Tunisie</div>
+    <div class="hero-tag ar-c" style="direction:rtl">أريانة · تونس</div>
+
+    <h1 class="hero-title fr-c">GYM<br><span class="red">ONE</span></h1>
+    <h1 class="hero-title ar-c ar-t">جيم<br><span class="red">ون</span></h1>
+
+    <p class="hero-tagline fr-c">Be Strong. La salle premium au cœur de l'Ariana.</p>
+    <p class="hero-tagline ar-c ar-t">كن قوياً. الصالة المميزة في قلب أريانة.</p>
+
+    <div class="hero-actions">
+      <a href="tel:52344446" class="btn-red fr-c">📞 Nous Appeler</a>
+      <a href="tel:52344446" class="btn-red ar-c btn-ar">📞 اتصل بنا</a>
+      <a href="#membership" class="btn-outline fr-c">Rejoindre</a>
+      <a href="#membership" class="btn-outline ar-c btn-ar">انضم الآن</a>
+    </div>
+  </div>
+</section>
+
+<!-- STATS BAR -->
+<div class="stats-bar reveal">
+  <div class="stat-item">
+    <div class="stat-num">CYBEX</div>
+    <div class="stat-label fr-i">Équipement</div>
+    <div class="stat-label ar-i ar-t">معدات احترافية</div>
+  </div>
+  <div class="stat-item">
+    <div class="stat-num">5.7K</div>
+    <div class="stat-label fr-i">Followers</div>
+    <div class="stat-label ar-i ar-t">متابع</div>
+  </div>
+  <div class="stat-item">
+    <div class="stat-num">7H</div>
+    <div class="stat-label fr-i">Ouverture</div>
+    <div class="stat-label ar-i ar-t">وقت الفتح</div>
+  </div>
+  <div class="stat-item">
+    <div class="stat-num">$$</div>
+    <div class="stat-label fr-i">Tarif Accessible</div>
+    <div class="stat-label ar-i ar-t">أسعار مناسبة</div>
+  </div>
+</div>
+
+<!-- GYM SECTION -->
+<section class="section gym-section" id="gym">
+  <div class="section-inner">
+    <div class="gym-grid">
+      <div class="gym-photos reveal">
+        <div class="gym-photo p1">
+          <span class="gym-photo-icon">🏋️</span>
+          <span class="gym-photo-label fr-i">Cardio Zone</span>
+          <span class="gym-photo-label ar-i">منطقة الكارديو</span>
+        </div>
+        <div class="gym-photo p2">
+          <span class="gym-photo-icon">💪</span>
+          <span class="gym-photo-label fr-i">Musculation</span>
+          <span class="gym-photo-label ar-i">رفع الأثقال</span>
+        </div>
+        <div class="gym-photo p3">
+          <span class="gym-photo-icon">⚡</span>
+          <span class="gym-photo-label fr-i">Zone CYBEX</span>
+          <span class="gym-photo-label ar-i">منطقة سايبكس</span>
+        </div>
+      </div>
+
+      <div class="gym-text reveal">
+        <span class="eyebrow fr-c">La Salle</span>
+        <span class="eyebrow ar-c">الصالة</span>
+        <h2 class="section-title fr-c">NOUVELLE<br><span class="red">GÉNÉRATION</span></h2>
+        <h2 class="section-title ar-c ar-t">جيل<br><span class="red">جديد</span></h2>
+        <div class="red-line"></div>
+        <br>
+        <p class="fr-c">Un club de fitness dernière génération implanté au cœur de l'Ariana. Espaces modernes, ambiance motivante et équipements haut de gamme.</p>
+        <p class="ar-c ar-t">نادٍ للياقة البدنية من الجيل الجديد في قلب أريانة. فضاءات عصرية وأجواء محفزة ومعدات عالية الجودة.</p>
+        <p class="fr-c">Équipé exclusivement de machines CYBEX et de tapis BT6100 — ce que les professionnels utilisent.</p>
+        <p class="ar-c ar-t">مجهز حصرياً بأجهزة CYBEX وأجهزة مشي BT6100 — ما يستخدمه المحترفون.</p>
+
+        <div class="feature-list">
+          <div class="feature-row fr-c"><div class="feature-check">✓</div> Machines CYBEX haute performance</div>
+          <div class="feature-row fr-c"><div class="feature-check">✓</div> Cardio zone — tapis BT6100</div>
+          <div class="feature-row fr-c"><div class="feature-check">✓</div> Cours collectifs disponibles</div>
+          <div class="feature-row fr-c"><div class="feature-check">✓</div> Accueil professionnel 7j/7</div>
+
+          <div class="feature-row ar-c ar-t"><div class="feature-check">✓</div> أجهزة CYBEX عالية الأداء</div>
+          <div class="feature-row ar-c ar-t"><div class="feature-check">✓</div> منطقة كارديو — أجهزة BT6100</div>
+          <div class="feature-row ar-c ar-t"><div class="feature-check">✓</div> دروس جماعية متاحة</div>
+          <div class="feature-row ar-c ar-t"><div class="feature-check">✓</div> استقبال احترافي 7 أيام/7</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SERVICES -->
+<section class="section" id="services">
+  <div class="section-inner">
+    <div class="section-header reveal" style="text-align:center">
+      <span class="eyebrow fr-c">Ce qu'on propose</span>
+      <span class="eyebrow ar-c">ما نقدمه</span>
+      <h2 class="section-title fr-c">NOS <span class="red">SERVICES</span></h2>
+      <h2 class="section-title ar-c ar-t"><span class="red">خدماتنا</span></h2>
+    </div>
+    <div class="services-grid reveal">
+      <div class="svc-card">
+        <div class="svc-icon">🏋️</div>
+        <div class="svc-name fr-c">MUSCULATION</div>
+        <div class="svc-name ar-c ar-t">بناء العضلات</div>
+        <p class="svc-desc fr-c">Espace musculation équipé de machines CYBEX professionnelles. Coaching disponible sur demande.</p>
+        <p class="svc-desc ar-c ar-t">فضاء رفع الأثقال مجهز بأجهزة CYBEX الاحترافية. التوجيه متاح عند الطلب.</p>
+      </div>
+      <div class="svc-card">
+        <div class="svc-icon">🏃</div>
+        <div class="svc-name fr-c">CARDIO</div>
+        <div class="svc-name ar-c ar-t">كارديو</div>
+        <p class="svc-desc fr-c">Tapis de course BT6100, vélos et équipements cardio haut de gamme pour brûler et performer.</p>
+        <p class="svc-desc ar-c ar-t">أجهزة مشي BT6100 ودراجات ومعدات كارديو متطورة للحرق والأداء العالي.</p>
+      </div>
+      <div class="svc-card">
+        <div class="svc-icon">👥</div>
+        <div class="svc-name fr-c">COURS COLLECTIFS</div>
+        <div class="svc-name ar-c ar-t">دروس جماعية</div>
+        <p class="svc-desc fr-c">Cours en groupe dynamiques animés par des coachs qualifiés. Motivation garantie.</p>
+        <p class="svc-desc ar-c ar-t">دروس جماعية ديناميكية يقودها مدربون مؤهلون. الحماس مضمون.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- HOURS -->
+<section class="section hours-section reveal">
+  <div class="section-inner" style="text-align:center">
+    <span class="eyebrow fr-c" style="color:rgba(255,255,255,0.7)">Quand nous retrouver</span>
+    <span class="eyebrow ar-c" style="color:rgba(255,255,255,0.7)">أوقات العمل</span>
+    <h2 class="section-title fr-c" style="color:var(--white)">HORAIRES <span style="color:var(--black)">D'OUVERTURE</span></h2>
+    <h2 class="section-title ar-c ar-t" style="color:var(--white)"><span style="color:var(--black)">أوقات</span> العمل</h2>
+    <div class="hours-grid">
+      <div class="hour-card">
+        <div class="hour-day fr-i">Lundi — Vendredi</div>
+        <div class="hour-day ar-i ar-t">الاثنين — الجمعة</div>
+        <div class="hour-time">07H – 22H</div>
+      </div>
+      <div class="hour-card">
+        <div class="hour-day fr-i">Samedi</div>
+        <div class="hour-day ar-i ar-t">السبت</div>
+        <div class="hour-time">07H – 19H</div>
+      </div>
+      <div class="hour-card">
+        <div class="hour-day fr-i">Dimanche</div>
+        <div class="hour-day ar-i ar-t">الأحد</div>
+        <div class="hour-time">09H – 13H</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- MEMBERSHIP CTA -->
+<section class="membership reveal" id="membership">
+  <span class="eyebrow fr-c">Rejoindre le club</span>
+  <span class="eyebrow ar-c">انضم إلى النادي</span>
+  <h2 class="fr-c">PRÊT À ÊTRE<br><span class="red">PLUS FORT ?</span></h2>
+  <h2 class="ar-c ar-t">مستعد تكون<br><span class="red">أقوى؟</span></h2>
+  <p class="fr-c">Rejoignez Gym One dès aujourd'hui. Contactez-nous pour connaître nos abonnements et commencer votre transformation.</p>
+  <p class="ar-c ar-t">انضم إلى Gym One اليوم. تواصل معنا لمعرفة خيارات الاشتراك وابدأ تحولك.</p>
+  <div class="contact-box">
+    <a href="tel:52344446" class="contact-phone">📞 52 344 446</a>
+    <div class="contact-divider"></div>
+    <p class="contact-address fr-c">📍 Avenue Habib Thameur, Ariana, Tunisie</p>
+    <p class="contact-address ar-c ar-t">📍 شارع الحبيب ثامر، أريانة، تونس</p>
+    <a href="tel:52344446" class="btn-red fr-c" style="width:100%;text-align:center">Appeler Maintenant</a>
+    <a href="tel:52344446" class="btn-red ar-c btn-ar" style="width:100%;text-align:center">اتصل الآن</a>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-brand">GYM <span class="red">ONE</span></div>
+  <div class="footer-tagline">Be Strong</div>
+  <div class="footer-copy">© 2025 Gym One · Avenue Habib Thameur, Ariana · 52 344 446</div>
+</footer>
+
+<script>
+  function setLang(lang) {
+    document.body.classList.toggle('ar', lang === 'ar');
+    document.getElementById('btn-fr').classList.toggle('active', lang === 'fr');
+    document.getElementById('btn-ar').classList.toggle('active', lang === 'ar');
+    document.documentElement.setAttribute('lang', lang);
+    document.documentElement.setAttribute('dir', lang === 'ar' ? 'rtl' : 'ltr');
+  }
+  const obs = new IntersectionObserver(entries => {
+    entries.forEach(e => { if(e.isIntersecting) e.target.classList.add('visible'); });
+  }, {threshold: 0.1});
+  document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
+</script>
+</body>
+</html>
